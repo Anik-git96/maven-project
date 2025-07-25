@@ -7,11 +7,19 @@ pipeline {
       }
     }
 
-    stage('package job') //validate then compile and package
+    stage('package job') //validate, test and compile
     {
       steps {
         withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenSettingsConfig: '', traceability: true) {
           sh 'mvn package'
+        }
+      }
+    }
+    stage('deploy job') 
+    {
+      steps {
+        sshagent(['DEV_CICD']) {
+          sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war ec2-user@3.7.69.87:/usr/share/tomcat/webapps'
         }
       }
     }
