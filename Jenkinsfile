@@ -3,25 +3,42 @@ pipeline {
   stages {
     stage('scm checkout') {
       steps {
-        git branch: 'master', url: 'https://github.com/kumargaurav039/maven-project.git'
+        git branch: 'master', url: 'https://github.com/Anik-git96/maven-project.git'
       }
     }
 
-    stage('package job') //validate, test and compile
+
+    stage('compile the job') //validate then compile
     {
       steps {
         withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenSettingsConfig: '', traceability: true) {
-          sh 'mvn package'
+          sh 'mvn compile'
         }
       }
     }
-    stage('deploy job') 
-    {
+
+
+    stage('build the code') {
       steps {
-        sshagent(['DEV_CICD']) {
-          sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war ec2-user@3.7.69.87:/usr/share/tomcat/webapps'
+        withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenSettingsConfig: '', traceability: true) {
+          sh 'mvn clean package'
         }
       }
     }
+    stage('create docker image') {
+      steps {
+        sh 'docker build -t anik96/cicd:latest .'
+      }
+    }
+    stage('push docker image to dockerhub') {
+      steps {
+        
+        withDockerRegistry(credentialsId: 'DockerHub', url: 'https://index.docker.io/v1/') {
+            
+                sh 'docker push anik96/cicd:latest'
+            
+        }
+      }
     }
   }
+}
