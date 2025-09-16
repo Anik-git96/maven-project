@@ -23,7 +23,7 @@ pipeline {
       }
     }
 
-    stage('create docker image') {
+    /*stage('create docker image') {
       steps {
         sh 'docker build -t e31531469/ethans954:latest .'
       }
@@ -39,7 +39,7 @@ pipeline {
                 sh 'docker push e31531469/ethans954:latest'
             
         }
-      }
+      }*/
     }
   }
-}
+
