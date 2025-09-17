@@ -6,10 +6,10 @@ pipeline {
         git branch: 'master', url: 'https://github.com/Anik-git96/maven-project.git'
       }
     }
-    stage('compile job') {
+    stage('package job') {
       steps {
         withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenSettingsConfig: '', traceability: true) {
-          sh 'mvn compile'
+          sh 'mvn package'
         }
       }
     }
