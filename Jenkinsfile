@@ -13,6 +13,13 @@ pipeline {
         }
       }
     }
+    stage('deploy job') {
+      steps{
+        sshagent(['tomcat']) {
+          sh 'scp -o StrictHostKeyChecking=no /webapp/target/webapp.war ec2-user@3.7.69.128:/usr/share/tomcat/webapps'
+        }
+      }
+    }
 
     /*stage('create docker image') {
       steps {
