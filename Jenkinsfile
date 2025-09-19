@@ -16,7 +16,7 @@ pipeline {
     stage('deploy the job') {
       steps{
         sshagent(['tomcat']) {
-          sh 'scp -o StrictHostKeyChecking=no /webapp/target/webapp.war ec2-user@3.7.69.128:/usr/share/tomcat/webapps'
+          sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/pr1/webapp/target/webapp.war ec2-user@3.7.69.128:/usr/share/tomcat/webapps'
         }
       }
     }
